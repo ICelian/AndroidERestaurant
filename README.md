@@ -1,2 +1,0 @@
-"# AndroidERestaurant"  
-"# AndroidERestaurant" 
