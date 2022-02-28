@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "379531329185",
+    "firebase_url": "https://projet1-39d3d-default-rtdb.firebaseio.com",
+    "project_id": "projet1-39d3d",
+    "storage_bucket": "projet1-39d3d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:379531329185:android:f2400a00beda9e6803bae0",
+        "android_client_info": {
+          "package_name": "fr.isen.lopez.isensocialnetwork"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "379531329185-vd2af7qfku5as2p95q7gut5eqp5mnl6p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_u_icANio87O3am-GWN99n8Ev8WtisaY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "379531329185-vd2af7qfku5as2p95q7gut5eqp5mnl6p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

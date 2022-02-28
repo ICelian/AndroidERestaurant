@@ -1,5 +1,4 @@
 package fr.isen.lopez.androiderestaurant
-import android.app.DownloadManager
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,8 +7,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import fr.isen.lopez.androiderestaurant.HomeActivity.Companion.CategoryType
+import com.google.gson.GsonBuilder
+import fr.isen.lopez.androiderestaurant.Detail.DetailActivity
 import fr.isen.lopez.androiderestaurant.databinding.ActivityCategoryBinding
+import fr.isen.lopez.androiderestaurant.network.Dish
+import fr.isen.lopez.androiderestaurant.network.MenuResult
 import fr.isen.lopez.androiderestaurant.network.NetworkConstants
 import org.json.JSONObject
 
@@ -24,15 +26,22 @@ enum class LunchType {
                 FINISH -> R.string.finish
             }
         }
+        fun getCategoryTitle(type: LunchType): String{
+            return when(type){
+                STARTER -> "Entrées"
+                MAIN -> "Plats"
+                FINISH -> "Desserts"
 
+            }
+
+         }
     }
 }
 
-
-class CategoryActivity : AppCompatActivity() {
+class CategoryActivity : BaseActivity() {
     lateinit var binding: ActivityCategoryBinding
     lateinit var currentCategory: LunchType
-    val fakeItems = listOf("Item1","Item2","Item3","Item4")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCategoryBinding.inflate(layoutInflater)
@@ -40,35 +49,12 @@ class CategoryActivity : AppCompatActivity() {
 
         currentCategory = intent.getSerializableExtra(HomeActivity.CategoryType) as? LunchType ?: LunchType.STARTER
         setupTilte()
-        setupList()
+
         makeRequest()
-        Log.d("life cycle", "CategoryActivity onCreate")
+
     }
 
-    override fun onDestroy() {
-        Log.d("life cycle", "CategoryActivity onDestroy")
-        super.onDestroy()
-    }
 
-    override fun onRestart() {
-        super.onRestart()
-        Log.d("life cycle", "CategoryActivity onRestart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("life cycle", "CategoryActivity onResume")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("life cycle", "CategoryActivity onStart")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("life cycle", "CategoryActivity onStop")
-    }
 
     private fun makeRequest() {
         val queue = Volley.newRequestQueue(this)
@@ -80,7 +66,8 @@ class CategoryActivity : AppCompatActivity() {
             url,
             parameters,
             {
-            Log.d("tag","{${it.toString()}")
+
+                parseResult(it.toString())
 
             },
             {
@@ -88,6 +75,17 @@ class CategoryActivity : AppCompatActivity() {
 
             })
         queue.add(request)
+    }
+    private fun parseResult(response: String){
+        val result = GsonBuilder().create().fromJson(response ,MenuResult::class.java)
+        val items = result.data.firstOrNull{
+            it.name == LunchType.getCategoryTitle(currentCategory)
+        }?.items
+
+        items?.let {
+            setupList(it)
+        }
+
     }
 
 
@@ -97,10 +95,10 @@ class CategoryActivity : AppCompatActivity() {
         binding.title.text = getString(LunchType.getResString(currentCategory))
     }
 
-    private fun setupList() {
+    private fun setupList(items: List<Dish>) {
         binding.itemRecyclerView.layoutManager = LinearLayoutManager(this)
-        val adapter = ItemAdapter(fakeItems){item ->
-            val intent = Intent(this@CategoryActivity,DetailActivity::class.java)
+        val adapter = ItemAdapter(items){item ->
+            val intent = Intent(this@CategoryActivity, DetailActivity::class.java)
             //permet de rediriger vers une autre page quand on clique
             intent.putExtra(CategoryActivity.ItemSelected, item)
             startActivity(intent)
@@ -108,6 +106,7 @@ class CategoryActivity : AppCompatActivity() {
         }
         binding.itemRecyclerView.adapter = adapter
     }
+
     companion object{
         const val ItemSelected = "ItemSelected"
     }

@@ -3,4 +3,11 @@
     <string name="starters">Entrées</string>
     <string name="main">Plats</string>
     <string name="finish">Desserts</string>
+    <string name="total">Total</string>
+    <string name="itemAdded">Votre plat a été ajouté au panier</string>
+    <string name="basket">Panier</string>
+    <string name="quantity">Quantité : </string>
+    <string name="order">Passer la commande</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
